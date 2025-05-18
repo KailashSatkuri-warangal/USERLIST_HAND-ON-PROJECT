@@ -1,5 +1,6 @@
 # User List App
-![APP](db/image.png).
+![APP](db/image.png) 
+# DB
 ![DB](db/db.png).
 A simple user list application built with Node.js, Express, and MySQL.
 
