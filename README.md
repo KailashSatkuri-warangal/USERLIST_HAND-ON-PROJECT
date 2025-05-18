@@ -1,26 +1,26 @@
 # User List App
 ![APP](db/image.png) 
 ## DB
-![DB](db/db.png).
+![DB](db/db.png)
 ### A simple user list application built with Node.js, Express, and MySQL.
 
 # 📁 File Structure
 ## User Listapp/
-## ├── public/
-## │   ├── app.html
-## │   └── script.js
-## ├── server.js
-## ├── package.json
-## ├── db/
-## │   └── sru_db.sql
-## ├── LICENSE
-## └── README.md
+### ├── public/
+### │   ├── app.html
+### │   └── script.js
+### ├── server.js
+### ├── package.json
+### ├── db/
+### │   └── sru_db.sql
+### ├── LICENSE
+### └── README.md
 
 
 # 📦 Setup Instructions
 ### npm init -y
 ### npm install express mysql2
-# --------------
+
 ### open package.json
 ### add line
 ### npm install nodemon : ,"start": "nodemon server.js"
