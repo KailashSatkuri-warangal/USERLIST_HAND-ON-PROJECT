@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e6ecf0 0%, #f0f4f8 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #1e3a8a;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-bar {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    }
+
+    .search-bar::before {
+      content: '🔍';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: #64748b;
+    }
+
+    .sort-buttons button, .refresh-button, .pagination button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #14b8a6;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .sort-buttons button:hover, .refresh-button:hover, .pagination button:hover {
+      background: #0d9488;
+      transform: translateY(-2px);
+    }
+
+    .sort-buttons button.active {
+      background: #1e3a8a;
+    }
+
+    .pagination button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .entries-select {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .entries-select label {
+      font-size: 0.95rem;
+      color: #1e3a8a;
+    }
+
+    .entries-select select {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #ffffff;
+      cursor: pointer;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .entries-select select:focus {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+      outline: none;
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.1rem;
+      color: #1e3a8a;
+    }
+
+    .loading-spinner::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #14b8a6;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 20px;
+      font-size: 1.1rem;
+      color: #64748b;
+    }
+
+    .table-data {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0;
+      padding: 0;
+    }
+
+    .table {
+      width: 100%;
+      max-width: 900px;
+      margin: 20px auto;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      display: table;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+      color: #1f2937;
+    }
+
+    th {
+      background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+      color: #ffffff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr {
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    tr:hover {
+      background: #e0f2fe;
+      transform: scale(1.01);
+    }
+
+    #user-table-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    #user-table-section:not(.hidden) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .sort-buttons, .pagination, .entries-select {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      .table-responsive {
+        overflow-x: visible;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #ffffff;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: none;
+        font-size: 0.9rem;
+      }
+
+      td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #1e3a8a;
+        width: 40%;
+        min-width: 130px;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      .table {
+        max-width: 100%;
+        margin: 10px auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      header p {
+        font-size: 0.95rem;
+      }
+
+      .search-bar input {
+        font-size: 0.9rem;
+        padding: 10px 36px 10px 14px;
+      }
+
+      .sort-buttons button, .refresh-button, .pagination button, .entries-select select {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+      }
+
+      td {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="container" class="container">
+    <header>
+      <h1>User List</h1>
+      <p>Browse and manage student records</p>
+    </header>
+    <div class="controls">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search by name or email...">
+      </div>
+      <div class="sort-buttons">
+        <button class="sort-button" data-sort="student_id">Sort by ID</button>
+        <button class="sort-button" data-sort="age">Sort by Age</button>
+        <button class="sort-button" data-sort="gpa">Sort by GPA</button>
+      </div>
+      <div class="entries-select">
+        <label for="entries-per-page">Show</label>
+        <select id="entries-per-page" name="entries-per-page">
+          <option value="10" selected>10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+          <option value="1500">1500</option>
+        </select>
+        <label>entries</label>
+      </div>
+      <button class="refresh-button">Refresh</button>
+    </div>
+    <div class="pagination">
+      <button id="prev-page" disabled>Previous</button>
+      <button id="next-page" disabled>Next</button>
+    </div>
+    <div id="loading-spinner" class="loading-spinner hidden">Loading</div>
+    <div id="no-data" class="no-data hidden">No students found</div>
+    <div id="user-table-section" class="hidden">
+      <div id="table-container" class="table-data">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Student ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Email</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Major</th>
+                <th scope="col">GPA</th>
+                <th scope="col">Enrollment Date</th>
+                <th scope="col">Graduation Date</th>
+              </tr>
+            </thead>
+            <tbody id="user-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>

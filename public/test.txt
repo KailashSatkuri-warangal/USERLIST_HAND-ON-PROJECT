@@ -1,0 +1,18 @@
+create database sru_db;
+
+
+
+sample -------------
+
+create table student (
+	student_id INT,
+	first_name VARCHAR(50),
+	last_name VARCHAR(50),
+	age INT,
+	email VARCHAR(50),
+	gender VARCHAR(50),
+	major VARCHAR(16),
+	gpa DECIMAL(3,2),
+	enrollment_date DATE,
+	graduation_date DATE
+);

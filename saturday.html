@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saturday Lesson</title>
+</head>
+<body>
+    <h1 id="header-1">Event and Event Listener</h1>
+    <button id="button">Click Me</button>
+    <!-- div#container-1 -->
+    <div id="container-1">
+
+    </div>
+    <script>
+        const hearderText=document.getElementById("header-1");
+        const button1 = document.getElementById("button");
+        const container1=document.getElementById("container-1");
+
+        console.log(button.textContent);
+        button.addEventListener("click", (event) => {
+            console.log("Button Clicked",event.target.textContent);
+              ///callback function
+            container1.innerHTML='<p> Button Clicked </p>';
+            hearderText.style.color="#E92016";
+            hearderText.style.backgroundColor="#1ECBE1";
+            hearderText.style.textAlign="center";
+            hearderText.style.borderRadius="10px";
+            hearderText.style.margin="10px";
+            hearderText.style.padding="10px";
+        });
+
+    </script>
+</body>
+</html>
