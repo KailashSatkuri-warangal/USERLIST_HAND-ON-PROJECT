@@ -10,8 +10,6 @@ create table student (
 	enrollment_date DATE,
 	graduation_date DATE
 );
-
-
 insert into student (student_id, first_name, last_name, age, email, gender, major, gpa, enrollment_date, graduation_date) values (1, 'Kelila', 'Grouen', 22, 'kgrouen0@zdnet.com', 'Female', 'History', 0.76, '2025-12-14', '2024-10-09');
 insert into student (student_id, first_name, last_name, age, email, gender, major, gpa, enrollment_date, graduation_date) values (2, 'Max', 'Escoffier', 24, 'mescoffier1@nasa.gov', 'Male', 'Mathematics', 0.43, '2024-10-17', '2024-03-20');
 insert into student (student_id, first_name, last_name, age, email, gender, major, gpa, enrollment_date, graduation_date) values (3, 'Raine', 'Tokley', 19, 'rtokley2@cyberchimps.com', 'Genderqueer', 'Computer Science', 0.8, '2022-11-11', '2025-03-05');
